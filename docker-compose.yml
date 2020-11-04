@@ -33,7 +33,7 @@ services:
       timeout: 10s
       retries: 10
     ports:
-      - "3306:3306"
+      - "3406:3306"
   fineract-server:
     build:
       context: .
@@ -63,6 +63,8 @@ services:
     restart: always
     ports:
       - 9090:80
+    volumes:
+      - "mifos:/usr/share/nginx/html"
 
 
 # https://issues.apache.org/jira/browse/FINERACT-762
@@ -70,3 +72,10 @@ services:
 # replace org.drizzle.jdbc.DrizzleDriver with com.mysql.jdbc.Driver in DRIVERCLASS_NAME and fineract_tenants_driver,
 # and remove ":thin:" from SUB_PROTOCOL and fineract_tenants_url.  Note that the mysql-connector-java-*.jar is already
 # bundled in the container by the Dockerfile, but just not used by default.
+volumes:
+  mifos:
+    driver: local
+    driver_opts:
+        type: none
+        o: bind
+        device: "${PWD}/mifos"
